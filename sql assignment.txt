@@ -1,0 +1,86 @@
+CREATE TABLE salespeople 
+( 
+snum INT(4) PRIMARY KEY, 
+sname VARCHAR(10) UNIQUE, 
+city VARCHAR(10), 
+comm FLOAT(3) 
+); 
+
+CREATE TABLE customers 
+( 
+cnum INT(4) PRIMARY KEY, 
+cname VARCHAR(20), 
+city VARCHAR(20) NOT NULL, 
+snum INT(4),
+FOREIGN KEY (snum) REFERENCES salespeople(snum)
+); 
+
+CREATE TABLE orders 
+( 
+onum INT(4) PRIMARY KEY, 
+amt FLOAT(10), 
+odate DATE, 
+cnum INT(4), 
+snum INT(4),
+FOREIGN KEY(cnum) REFERENCES customers(cnum),
+FOREIGN KEY(snum) REFERENCES salespeople(snum)
+); 
+
+INSERT INTO Salespeople VALUES('1001','Peel','London','0.12'),
+('1002','Serres','San Jose','0.13'),
+('1004','Motika','London','0.11'),
+('1007','Rifkin','Barcelona','0.15'),
+('1003','Axelrod','Newyork','0.10');
+
+INSERT INTO Customers VALUES('2001','Hoffman','London','1001'),
+('2002','Giovanni','Rome','1003'),
+('2003','Liu','San Jose','1002'),
+('2004','Grass','Berlin','1002'),
+('2006','Clemens','London','1001'),
+('2008','Cisneros','San Jose','1007'),
+('2007','Pereira','Rome','1004');
+
+INSERT INTO orders VALUES(3001,18.69,'1990-10-03',2008, 1007), 
+(3003,767.19,'1990-10-03',2001,1001),
+(3002,1900.10,'1990-10-03',2007,1004),
+(3005,5160.45,'1990-10-03',2003,1002), 
+(3006,1098.16,'1990-10-03',2008,1007), 
+(3009,1713.23,'1990-10-04',2002,1003), 
+(3007,75.75,'1990-10-04',2004,1002), 
+(3008,4723.00,'1990-10-05',2006,1001), 
+(3010,1309.95,'1990-10-06',2004,1002), 
+(3011,9891.88,'1990-10-06',2006,1001);
+
+SELECT COUNT(sname)
+FROM salespeople
+WHERE sname LIKE'A%' OR sname LIKE 'a%';
+
+SELECT salespeople.snum,
+salespeople.sname,
+orders.amt
+FROM
+salespeople
+INNER JOIN
+orders
+ON salespeople.snum=orders.snum
+WHERE amt>2000;
+
+SELECT COUNT(sname)
+FROM salespeople
+WHERE city='Newyork';
+
+SELECT snum,
+sname,
+city,
+COUNT(sname)
+FROM salespeople
+WHERE city='london' and city='paris';
+
+SELECT salespeople.snum,
+salespeople.sname,
+orders.odate
+FROM
+salespeople
+INNER JOIN
+orders
+ON salespeople.snum=orders.snum;
